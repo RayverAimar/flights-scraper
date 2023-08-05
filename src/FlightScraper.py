@@ -41,11 +41,11 @@ class LatamScraper:
             latam_scraper_dict_list.append(flight.get_dict())
         return latam_scraper_dict_list
     
-    def save(self, title="./data/flights_latam_"):
-        title=title+self.departure_date.__str__()+'.json'
+    def save(self, title="flights_latam_"):
+        title='./data/'+title+self.departure_date.__str__()+'.json'
         with open(title, "w") as outfile:
             json.dump(self.__get_data(), outfile)
-            print(f'Data of Flights of {self.departure_date} saved successfully as \'{title}\'')
+            print(f'Data of Flights of {self.departure_date} saved successfully in \'{title}\'')
 
     def scrape(self):
         options = webdriver.ChromeOptions()
