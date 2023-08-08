@@ -1,7 +1,12 @@
 HOUR = 'hour'
 MINUTES = 'min'
 
-def get_minutes_from_str(datetime_str): #If datetime lenght is more than 4 characters then it has minutes in it
+def get_minutes_from_str(datetime_str):
+        '''
+        Function to return minutes of an str. 
+        If datetime lenght is more than 4 characters then it has minutes in it.
+        Sample: 1 hr 25 min -> 25
+        '''
         index_to_trim = -1
         for i, e in enumerate(datetime_str):
             if e == MINUTES[0]:
@@ -10,6 +15,12 @@ def get_minutes_from_str(datetime_str): #If datetime lenght is more than 4 chara
         return int(datetime_str[index_to_trim-3:index_to_trim-1])
 
 def get_hours_from_str(datetime_):
+    '''
+        Function to return hours of a formatted str. 
+        Sample: 10 hr 25 min -> 1
+                2 hr 35 min -> 2
+                5 hr -> 5
+    '''
     index_to_trim = -1
     for i, e in enumerate(datetime_):
         if e == HOUR[0]:
@@ -17,7 +28,12 @@ def get_hours_from_str(datetime_):
             break
     return int(datetime_[:index_to_trim-1])
 
-def get_hours_and_minutes_from_datetime(datetime_):
+def get_hours_and_minutes_from_time(datetime_):
+    '''
+        Function to return hours and minutes of a formatted time.
+        Sample: 10:00 -> 10 0
+                14:25 -> 14 25 
+    '''
     separator_index = -1
     for i, e in enumerate(datetime_):
         if e == ':':
@@ -26,8 +42,8 @@ def get_hours_and_minutes_from_datetime(datetime_):
     return int(datetime_[:separator_index]), int(datetime_[separator_index+1:])
 
 class Flight:
-    def __init__(self, price, currency, duration, departure_datetime, arrival_datetime, scale=None, next_flight=None):
-        self.price = price
+    def __init__(self, fees, currency, duration, departure_datetime, arrival_datetime, scale=None, next_flight=None):
+        self.fees = fees
         self.currency = currency
         self.duration = duration
         self.departure_datetime = departure_datetime
@@ -42,22 +58,19 @@ class Flight:
     def print_details(self):
         for detail in self.details:
             print(detail)
-
-    def __str__(self) -> str:
-        return f"Price: {self.currency.upper()} {self.price}\n\
-                Duration: {self.duration}\n\
-                Departure Datetime: {self.departure_datetime}\n\
-                Arrival Datetime: {self.arrival_datetime}\n\
-                Scale: {self.scale}\n"
     
     def get_dict(self):
         flight_dict = {}
-        flight_dict['price'] = self.price + ' ' + self.currency
+        fees_dict = {}
+        for fee in self.fees:
+            fees_dict[fee.name] = fee.price
+        flight_dict['price'] = fees_dict
+        flight_dict['currency'] = self.currency.upper()
         flight_dict['duration'] = self.duration
-        flight_dict['departure_date'] = str(self.departure_datetime.year) + '-' + str(self.departure_datetime.month) + '-' + str(self.departure_datetime.day)
-        flight_dict['departure_time'] = str(self.departure_datetime.hour) + ':' + str(self.departure_datetime.minute)
-        flight_dict['arrival_date'] = str(self.arrival_datetime.year) + '-' + str(self.arrival_datetime.month) + '-' + str(self.arrival_datetime.day)
-        flight_dict['arrival_time'] = str(self.arrival_datetime.hour) + ':' + str(self.arrival_datetime.minute)
+        flight_dict['departure_date'] = '-'.join((str(self.departure_datetime.year), str(self.departure_datetime.month), str(self.departure_datetime.day)))
+        flight_dict['departure_time'] = ':'.join((str(self.departure_datetime.hour), str(self.departure_datetime.minute)))
+        flight_dict['arrival_date'] = '-'.join((str(self.arrival_datetime.year), str(self.arrival_datetime.month), str(self.arrival_datetime.day)))
+        flight_dict['arrival_time'] = ':'.join((str(self.arrival_datetime.hour), str(self.arrival_datetime.minute)))
         flight_dict['scales'] = self.scale
         details_list = []
         for detail in self.details:
@@ -89,10 +102,12 @@ class FlightDetails:
         flightdetails_dict = {}
         flightdetails_dict['flight_code'] = self.flight_code
         flightdetails_dict['airplane_code'] = self.airplane_code
-        flightdetails_dict['origin'] = self.origin + ' (' + self.departure_time + ')'
+        flightdetails_dict['origin'] = self.origin
         flightdetails_dict['origin_airport'] = self.departure_airport
-        flightdetails_dict['destination'] = self.destination + ' (' + self.arrival_time + ')'
+        flightdetails_dict['departure_time'] = self.departure_time
+        flightdetails_dict['destination'] = self.destination
         flightdetails_dict['destination_airport'] = self.arrival_airport
+        flightdetails_dict['arrival_time'] = self.arrival_time
         flightdetails_dict['duration'] = self.duration
         return flightdetails_dict
 
@@ -110,6 +125,11 @@ class Scale:
         scale_dict['scale_duration'] = self.scale_duration
         return scale_dict
 
+class Fee:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
 dict_of_acronyms = {
     'Arequipa':'AQP',
     'Cuzco':'CUZ',
@@ -117,3 +137,4 @@ dict_of_acronyms = {
     'Piura':'PIU',
     'Tumbes':'TBP'
 }
+
