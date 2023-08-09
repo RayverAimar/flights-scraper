@@ -113,5 +113,5 @@ Initializing scraping...
 Processing flight (1/22)
 ...
 rocessing flight (22/22)
-Data collected of Flights from 2024-02-03 saved successfully in './data/flights_latam_outboundArequipa2024-02-03.json'
+Data collected of Flights from 2024-02-03 saved successfully in './data/flights_latam_outbound_Arequipa_2024-02-03.json'
 ```
