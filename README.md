@@ -91,7 +91,7 @@ The general layout of the JSON file exported is as follows:
 }
 ```
 
-Where prices per flight might not appear if they are not offered by the company in a given flight.
+Prices per flight might not appear if they are not offered by the company in a given flight.
 
 ## Example
 The following code uses a configuration for scraping flights from Arequipa to Lima in some random dates.
